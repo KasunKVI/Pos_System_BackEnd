@@ -23,7 +23,6 @@ import java.util.List;
 @WebServlet(name = "orderApi", urlPatterns = "/orderApi")
 public class OrderApi extends HttpServlet {
 
-
     static Session session;
 
     static Transaction transaction;
