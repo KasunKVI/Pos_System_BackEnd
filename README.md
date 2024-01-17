@@ -57,7 +57,7 @@
 </ol>
 
 <h2>Logging</h2>
-<p>Logging in this project is handled by <a href="https://logging.apache.org/log4j/2.x/" target="_blank">Log4j</a>. Logs can be found in the <code>logs</code> directory.</p>
+<p>Logging in this project is handled by <a href="https://www.slf4j.org/" target="_blank">slf4j</a>. Logs can be found in the <code>logs</code> directory.</p>
 
 <h2>API Documentation</h2>
 <p>The API is documented using Postman. You can find the Postman collection in the <code>docs</code> folder.</p>
