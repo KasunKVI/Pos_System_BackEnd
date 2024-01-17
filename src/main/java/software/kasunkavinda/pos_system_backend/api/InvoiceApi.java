@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import software.kasunkavinda.pos_system_backend.dto.OrderDto;
 import software.kasunkavinda.pos_system_backend.dto.OrderItem;
 import software.kasunkavinda.pos_system_backend.entity.Customer;
@@ -30,6 +32,8 @@ public class InvoiceApi extends HttpServlet {
 
     static Transaction transaction;
 
+    private static final Logger logger = LoggerFactory.getLogger(InvoiceApi.class);
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -39,6 +43,7 @@ public class InvoiceApi extends HttpServlet {
                 if (req.getContentType() == null ||
                         !req.getContentType().toLowerCase().startsWith("application/json")) {
                     resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    logger.warn("Error on request type");
                 } else {
                     Jsonb jsonb = JsonbBuilder.create();
                     var order = jsonb.fromJson(req.getReader(), OrderDto.class);
@@ -47,6 +52,7 @@ public class InvoiceApi extends HttpServlet {
 
                     List<OrderItem> itemIds = order.getItems();
                     List<Item> items = new ArrayList<>();
+
                     for (OrderItem orderItem: itemIds){
                         Item item = session.get(Item.class, orderItem.getItemId());
                         items.add(item);
@@ -60,6 +66,7 @@ public class InvoiceApi extends HttpServlet {
                     );
 
                     session.persist(order1);
+                    logger.info("Successfully complete the new orders transaction");
                 }
                 try {
                     transaction.commit();
@@ -80,6 +87,7 @@ public class InvoiceApi extends HttpServlet {
 
         session = FactoryConfiguration.getInstance().getSession();
         transaction = session.beginTransaction();
+        logger.info("Get new session");
     }
 
     @Override
@@ -91,6 +99,8 @@ public class InvoiceApi extends HttpServlet {
 
             Query<Orders> query = session.createQuery("SELECT MAX(id) FROM Orders", Orders.class);
             String lastOrder = String.valueOf(query.uniqueResultOptional().orElse(null));
+
+            logger.info("Get last order id from the database");
 
             String lastOrderIdString = (lastOrder != null) ? lastOrder : "0001"; // Default if null
 
