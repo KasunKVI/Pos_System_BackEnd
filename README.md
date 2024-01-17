@@ -65,5 +65,10 @@
 <h2>License</h2>
 <p>This project is licensed under the <a href="LICENSE" target="_blank">MIT License</a>.</p>
 
+<h2>Frontend Repository</h2>
+<p>If you are interested in the frontend part of the POS system, you can find the corresponding GitHub repository at the following link:</p>
+<p><a href="https://github.com/KasunKVI/Pos_System_FrontEnd" target="_blank">Frontend Repository</a></p>
+<p>Feel free to explore and contribute to the frontend codebase for a complete understanding of the POS system.</p>
+
 
 <p>Wishing you the best of success in your coding endeavors!</p>
