@@ -62,10 +62,10 @@ public class CustomerApi extends HttpServlet {
                     transaction.commit();
                 } catch (Exception e) {
                     transaction.rollback();
-                    e.printStackTrace();
+                    logger.error("Error message",e);
                 }
         } catch (Exception e) {
-        e.printStackTrace();
+          logger.error("Error message",e);
         resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         } finally {
             session.close();
@@ -103,10 +103,10 @@ public class CustomerApi extends HttpServlet {
                     transaction.commit();
                 } catch (Exception e) {
                     transaction.rollback();
-                    e.printStackTrace();
+                    logger.error("Error message",e);
                 }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error message",e);
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         } finally {
             session.close();
@@ -170,7 +170,7 @@ public class CustomerApi extends HttpServlet {
                     }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Error message",e);
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
             } finally {
                 session.close();
@@ -195,7 +195,7 @@ public class CustomerApi extends HttpServlet {
                         logger.warn("Customer not in database");
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error message",e);
                     resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
                 } finally {
                     session.close();

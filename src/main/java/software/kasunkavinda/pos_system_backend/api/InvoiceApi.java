@@ -72,10 +72,11 @@ public class InvoiceApi extends HttpServlet {
                     transaction.commit();
                 } catch (Exception e) {
                     transaction.rollback();
-                    e.printStackTrace();
+                    logger.error("Error message",e);
+
                 }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error message",e);
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         } finally {
             session.close();
@@ -115,7 +116,7 @@ public class InvoiceApi extends HttpServlet {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error message",e);
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         } finally {
             session.close();
