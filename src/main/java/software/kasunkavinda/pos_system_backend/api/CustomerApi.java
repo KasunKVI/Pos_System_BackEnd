@@ -80,6 +80,7 @@ public class CustomerApi extends HttpServlet {
                 if (req.getContentType() == null ||
                         !req.getContentType().toLowerCase().startsWith("application/json")) {
                     resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    logger.warn("Error on request type");
                 } else {
                     Jsonb jsonb = JsonbBuilder.create();
                     var customer = jsonb.fromJson(req.getReader(), CustomerDto.class);
@@ -95,7 +96,7 @@ public class CustomerApi extends HttpServlet {
                             null
                     );
 
-
+                    logger.info("Updated customer from database");
                     session.update(customer1);
                 }
                 try {
@@ -116,6 +117,7 @@ public class CustomerApi extends HttpServlet {
 
         session = FactoryConfiguration.getInstance().getSession();
         transaction = session.beginTransaction();
+        logger.info("Get new session");
     }
 
     @Override
@@ -133,6 +135,8 @@ public class CustomerApi extends HttpServlet {
 
                     List<Customer> customers = session.createNativeQuery("SELECT * FROM Customer", Customer.class).list();
                     transaction.commit();
+
+                    logger.info("Get all customers from database");
 
                         for(Customer customer: customers){
                             customer.setOrders(null);
@@ -153,6 +157,7 @@ public class CustomerApi extends HttpServlet {
                         Customer customer = session.get(Customer.class, id);
                         customer.setOrders(null);
 
+                        logger.info("Get selected customer from database");
 
                         Gson gson = new Gson(); // Import Gson library for JSON manipulation
                         String jsonCustomer = gson.toJson(customer);
@@ -184,9 +189,10 @@ public class CustomerApi extends HttpServlet {
                     if (customer != null) {
                         session.remove(customer);
                         transaction.commit();
-                        session.close();
+                        logger.info("Deleted selected customer from database");
                     }else {
                         resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Customer not found");
+                        logger.warn("Customer not in database");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
