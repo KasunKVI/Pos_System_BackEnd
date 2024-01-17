@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import software.kasunkavinda.pos_system_backend.dto.ItemDto;
 import software.kasunkavinda.pos_system_backend.entity.Item;
 import software.kasunkavinda.pos_system_backend.entity.Orders;
@@ -27,7 +29,7 @@ public class ItemApi extends HttpServlet {
 
     static Transaction transaction;
 
-    List<Orders> orders = new ArrayList<>();
+    private static final Logger logger = LoggerFactory.getLogger(ItemApi.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -52,15 +54,15 @@ public class ItemApi extends HttpServlet {
                 );
 
                 try {
+                    logger.info("Add new item to database");
                     session.persist(item1);
                     transaction.commit(); // Commit the transaction after successful persistence
                 } catch (Exception e) {
                     transaction.rollback(); // Rollback the transaction in case of exception
-                    e.printStackTrace();
+                    logger.error("Error message",e);
                 }
         }} catch (Exception e) {
-
-            e.printStackTrace();
+            logger.error("Error message",e);
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         } finally {
 
@@ -82,6 +84,8 @@ public class ItemApi extends HttpServlet {
                     List<Item> items = session.createNativeQuery("SELECT * FROM Item", Item.class).list();
                     transaction.commit();
 
+                    logger.info("Get all items from database");
+
                     for(Item item: items){
                        item.setOrders(null);
                     }
@@ -101,7 +105,7 @@ public class ItemApi extends HttpServlet {
                     Item item = session.get(Item.class, id);
                     item.setOrders(null);
 
-                    System.out.println(item);
+                    logger.info("Get selected item from database");
 
                     Gson gson = new Gson(); // Import Gson library for JSON manipulation
                     String jsonItem = gson.toJson(item);
@@ -114,7 +118,7 @@ public class ItemApi extends HttpServlet {
                 }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error message",e);
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         } finally {
             session.close();
@@ -136,6 +140,8 @@ public class ItemApi extends HttpServlet {
                     Item item = session.get(Item.class, id);
                     int newQty = item.getQty()-qty;
 
+                    logger.info("Updated item qty");
+
                     if(newQty <= 0){
                         session.remove(item);
                     }else {
@@ -156,16 +162,19 @@ public class ItemApi extends HttpServlet {
                             item.getPrice(),
                             null
                     );
+
+                    logger.info("Updated item details");
+
                     session.update(item1);
                 }
                 try {
                     transaction.commit();
                 } catch (Exception e) {
                     transaction.rollback();
-                    e.printStackTrace();
+                    logger.error("Error message",e);
                 }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error message",e);
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         } finally {
             session.close();
@@ -184,18 +193,18 @@ public class ItemApi extends HttpServlet {
             Item item = session.get(Item.class, id);
             if (item != null) {
                 session.remove(item);
+                logger.info("Deleted selected item from database");
                 transaction.commit();
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Item not found");
             }
         }catch (Exception e) {
 
-                e.printStackTrace();
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
-            } finally {
-
-                session.close();
-            }
+            logger.error("Error message",e);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
+        } finally {
+            session.close();
+        }
 
     }
 
@@ -203,5 +212,6 @@ public class ItemApi extends HttpServlet {
 
         session = FactoryConfiguration.getInstance().getSession();
         transaction = session.beginTransaction();
+        logger.info("Get new session");
     }
 }
