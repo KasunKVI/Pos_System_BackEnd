@@ -67,6 +67,10 @@ public class InvoiceApi extends HttpServlet {
 
                     session.persist(order1);
                     logger.info("Successfully complete the new orders transaction");
+
+                    // Set success response
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write("Order successfully placed");
                 }
                 try {
                     transaction.commit();

@@ -127,6 +127,10 @@ public class OrderApi extends HttpServlet {
                 logger.info("Update selected order");
                 session.update(orders);
 
+                // Set success response
+                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.getWriter().write("Order successfully updated");
+
 
             }
             try {
@@ -148,7 +152,7 @@ public class OrderApi extends HttpServlet {
         try {
             getConnection();
 
-            String id = req.getParameter("OrderId");
+            String id = req.getParameter("orderId");
 
 
             Orders orders = session.get(Orders.class, id);
@@ -157,6 +161,11 @@ public class OrderApi extends HttpServlet {
                 session.remove(orders);
                 transaction.commit();
                 logger.info("Delete selected order");
+
+                // Set success response
+                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.getWriter().write("Order successfully removed");
+
             }else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Customer not found");
             }

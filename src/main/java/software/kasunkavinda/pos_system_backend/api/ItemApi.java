@@ -57,6 +57,11 @@ public class ItemApi extends HttpServlet {
                     logger.info("Add new item to database");
                     session.persist(item1);
                     transaction.commit(); // Commit the transaction after successful persistence
+
+                    // Set success response
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write("Item successfully added");
+
                 } catch (Exception e) {
                     transaction.rollback(); // Rollback the transaction in case of exception
                     logger.error("Error message",e);
@@ -165,6 +170,11 @@ public class ItemApi extends HttpServlet {
                     logger.info("Updated item details");
 
                     session.update(item1);
+
+                    // Set success response
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write("Item successfully updated");
+
                 }
                 try {
                     transaction.commit();
@@ -193,6 +203,11 @@ public class ItemApi extends HttpServlet {
             if (item != null) {
                 session.remove(item);
                 logger.info("Deleted selected item from database");
+
+                // Set success response
+                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.getWriter().write("Item successfully deleted");
+
                 transaction.commit();
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Item not found");

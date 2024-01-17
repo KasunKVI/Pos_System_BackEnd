@@ -57,6 +57,9 @@ public class CustomerApi extends HttpServlet {
                     logger.info("Add new customer to database");
                     session.persist(customer1);
 
+                    // Set success response
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write("Customer successfully added");
                 }
                 try {
                     transaction.commit();
@@ -98,6 +101,10 @@ public class CustomerApi extends HttpServlet {
 
                     logger.info("Updated customer from database");
                     session.update(customer1);
+
+                    // Set success response
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write("Customer successfully updated");
                 }
                 try {
                     transaction.commit();
@@ -183,13 +190,18 @@ public class CustomerApi extends HttpServlet {
                     getConnection();
 
                     String id = req.getParameter("customerId");
-
-
                     Customer customer = session.get(Customer.class, id);
+
+
                     if (customer != null) {
                         session.remove(customer);
                         transaction.commit();
                         logger.info("Deleted selected customer from database");
+
+                        // Set success response
+                        resp.setStatus(HttpServletResponse.SC_OK);
+                        resp.getWriter().write("Customer successfully deleted");
+
                     }else {
                         resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Customer not found");
                         logger.warn("Customer not in database");
