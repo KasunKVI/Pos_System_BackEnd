@@ -15,11 +15,7 @@ public class CORSFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
 
-        System.out.println("CORS Filter");
-
         String origin = req.getHeader("Origin");
-
-        System.out.println("Origin Header : "+origin);
 
         if (origin.contains(getServletContext().getInitParameter("origin"))){
             res.setHeader("Access-Control-Allow-Origin",origin);

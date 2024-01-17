@@ -132,7 +132,6 @@ public class ItemApi extends HttpServlet {
 
                 if (req.getContentType() == null ||
                         !req.getContentType().toLowerCase().startsWith("application/json")) {
-//                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 
                     String id = req.getParameter("itemId");
                     int qty = Integer.parseInt(req.getParameter("qty"));

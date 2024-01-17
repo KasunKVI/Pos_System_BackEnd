@@ -65,7 +65,7 @@ public class OrderApi extends HttpServlet {
 
                 transaction.commit();
 
-                Gson gson = new Gson(); // Import Gson library for JSON manipulation
+                Gson gson = new Gson(); // Gson library for JSON manipulation
                 String jsonCustomer = gson.toJson(orderDateDtos);
 
                 resp.setContentType("application/json");
@@ -84,10 +84,9 @@ public class OrderApi extends HttpServlet {
                 logger.info("Get selected order from database");
 
                 OrderDateDto order_detail = new OrderDateDto(orders.getId(), orders.getDate(), orders.getBalance(), customer.getNic(), customer.getName());
-                Gson gson = new Gson(); // Import Gson library for JSON manipulation
+                Gson gson = new Gson(); //Gson library for JSON manipulation
                 String jsonCustomer = gson.toJson(order_detail);
 
-                System.out.println(order_detail);
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
                 PrintWriter out = resp.getWriter();
