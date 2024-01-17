@@ -1,0 +1,8 @@
+<Context>
+    <!-- Your existing DataSource configuration -->
+    <Resource name="jdbc/pos_system" auth="Container" type="javax.sql.DataSource"
+              maxTotal="10" maxIdle="8" maxWaitMillis="-1"
+              username="root" password="Kvkaviya@105" driverClassName="com.mysql.cj.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/pos_system?createDatabaseIfNotExist=true"/>
+
+</Context>
